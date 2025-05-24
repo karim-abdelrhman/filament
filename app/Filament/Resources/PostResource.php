@@ -38,7 +38,7 @@ class PostResource extends Resource
                 Section::make('Post Details')->schema([
                     TextInput::make('title')->required(),
                     TextInput::make('slug')->required(),
-                    Select::make('category_id')->relationship('category', 'name')->required(),
+                    Select::make('category_id')->relationship('category', 'name')->required()->searchable(),
                     TagsInput::make('tags')->required(),
                     MarkdownEditor::make('content')->required()->columnSpan('full'),
                 ])->columnSpan(2)->columns(2)->collapsible(),
