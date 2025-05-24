@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Patient extends Model
 {
-    protected $fillable = ['name']  ;
+    protected $fillable = ['name' , 'date_of_birth' , 'owner_id' , 'type']  ;
     public function owner(): BelongsTo
     {
         return $this->belongsTo(Owner::class);
