@@ -49,7 +49,13 @@ class PostResource extends Resource
                     Section::make("Meta")->schema([
                         ColorPicker::make('color')->required(),
                         Toggle::make('published')->required()
-                    ])
+                    ]),
+                    Section::make('authors')
+                        ->schema([
+                            Select::make('authors')
+                                ->multiple()
+                                ->relationship('authors', 'name') ,
+                        ])
                 ])->columnSpan(1),
             ])->Columns(3);
     }
