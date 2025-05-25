@@ -16,4 +16,17 @@ class ListPosts extends ListRecords
             Actions\CreateAction::make(),
         ];
     }
+
+    public function getTabs() : array
+    {
+        return [
+          'All' => ListRecords\Tab::make(),
+          'Published' => ListRecords\Tab::make()->modifyQueryUsing(function ($query) {
+              $query->where('published' , true);
+          }),
+            'UnPublished' => ListRecords\Tab::make()->modifyQueryUsing(function ($query) {
+                $query->where('published' , false);
+            }),
+        ];
+    }
 }
