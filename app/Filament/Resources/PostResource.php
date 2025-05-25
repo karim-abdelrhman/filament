@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\PostResource\Pages;
 use App\Filament\Resources\PostResource\RelationManagers;
 use App\Filament\Resources\PostResource\RelationManagers\AuthorsRelationManager;
+use App\Models\Category;
 use App\Models\Post;
 use Filament\Forms\Components\ColorPicker;
 use Filament\Forms\Components\FileUpload;
@@ -23,7 +24,10 @@ use Filament\Tables\Columns\CheckboxColumn;
 use Filament\Tables\Columns\ColorColumn;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\Filter;
+use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 
 
 class PostResource extends Resource
@@ -39,7 +43,10 @@ class PostResource extends Resource
                 Section::make('Post Details')->schema([
                     TextInput::make('title')->required(),
                     TextInput::make('slug')->required(),
-                    Select::make('category_id')->relationship('category', 'name')->required()->searchable(),
+                    Select::make('category_id')->relationship('category', 'name')
+                        ->required()
+                        ->searchable()
+                        ->preload(),
                     TagsInput::make('tags')->required(),
                     MarkdownEditor::make('content')->required()->columnSpan('full'),
                 ])->columnSpan(2)->columns(2)->collapsible(),
@@ -56,7 +63,8 @@ class PostResource extends Resource
                             Select::make('authors')
                                 ->label('Co Authors')
                                 ->multiple()
-                                ->relationship('authors', 'name') ,
+                                ->preload()
+                                ->relationship('authors', 'name'),
                         ])
                 ])->columnSpan(1),
             ])->Columns(3);
@@ -93,7 +101,19 @@ class PostResource extends Resource
                     ->toggleable(),
             ])
             ->filters([
-                //
+                Filter::make('Published Posts')
+                    ->query(function (Builder $query): Builder {
+                        return $query->where('published', true);
+                    }),
+                //for unpublished posts we can do another filter and make condition false
+                // do TernaryFilter::make('published') and it will work perfectly
+                SelectFilter::make('category_id')
+                    ->label('Category')
+                    ->relationship('category', 'name')
+                    ->multiple()
+                    ->searchable()
+                    ->preload()
+//                ->options(Category::all()->pluck('name', 'id')->toArray())
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
