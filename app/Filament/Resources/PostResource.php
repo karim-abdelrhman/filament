@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\PostResource\Pages;
 use App\Filament\Resources\PostResource\RelationManagers;
+use App\Filament\Resources\PostResource\RelationManagers\AuthorsRelationManager;
 use App\Models\Post;
 use Filament\Forms\Components\ColorPicker;
 use Filament\Forms\Components\FileUpload;
@@ -53,6 +54,7 @@ class PostResource extends Resource
                     Section::make('authors')
                         ->schema([
                             Select::make('authors')
+                                ->label('Co Authors')
                                 ->multiple()
                                 ->relationship('authors', 'name') ,
                         ])
@@ -107,7 +109,7 @@ class PostResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            AuthorsRelationManager::class
         ];
     }
 
