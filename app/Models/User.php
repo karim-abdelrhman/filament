@@ -23,6 +23,7 @@ class User extends Authenticatable implements FilamentUser
         'name',
         'email',
         'password',
+        'role'
 //        'email_verified_at',
     ];
 
@@ -48,7 +49,18 @@ class User extends Authenticatable implements FilamentUser
             'password' => 'hashed',
         ];
     }
-
+    public function isAdmin() : bool
+    {
+        return $this->role == 'admin';
+    }
+    public function isEditor() : bool
+    {
+        return $this->role == 'editor';
+    }
+    public function isUser() : bool
+    {
+        return $this->role == 'user';
+    }
     public function canAccessPanel(Panel $panel): bool
     {
         return true;
