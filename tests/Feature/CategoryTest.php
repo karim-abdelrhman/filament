@@ -102,7 +102,6 @@ class CategoryTest extends TestCase
 
         // assert database has the updated record
         $this->assertDatabaseHas('categories', $updatedCategory);
-
     }
 
     public function test_blade_return_successfully()
@@ -120,5 +119,16 @@ class CategoryTest extends TestCase
         foreach ($categories as $category) {
             $response->assertSee($category->name);
         }
+    }
+
+    public function test_store_category_failed_because_validation_fails()
+    {
+        $response = $this->post('categories' , [
+            'name' => 'test category',
+        ]);
+
+        $response->assertStatus(302);
+
+        $response->assertSessionHasErrors(['slug']);
     }
 }
