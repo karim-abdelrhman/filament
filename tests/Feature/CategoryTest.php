@@ -104,4 +104,21 @@ class CategoryTest extends TestCase
         $this->assertDatabaseHas('categories', $updatedCategory);
 
     }
+
+    public function test_blade_return_successfully()
+    {
+        $response = $this->get('categories');
+        $response->assertStatus(200);
+    }
+
+    public function test_blade_has_categories()
+    {
+        $categories = Category::factory()->count(5)->create();
+        $response = $this->get('categories');
+        $response->assertViewIs('categories.index');
+        $response->assertViewHas('categories');
+        foreach ($categories as $category) {
+            $response->assertSee($category->name);
+        }
+    }
 }
