@@ -19,6 +19,16 @@ class CategoryTest extends TestCase
     }
 
     /**
+     * $response->assertOk() --> return 200
+     * $response->assertAccepted() --> return 202
+     * $response->assertNotFound() --> return 404
+     * $response->assertBadRequest() --> return 400
+     * $response->assertConflict() --> return 409
+     * $response->status() --> return status code
+     * $response->statusText() --> return status text
+     */
+
+    /**
      * A basic feature test example.
      */
     public function test_index_method_return_list_of_categories(): void
